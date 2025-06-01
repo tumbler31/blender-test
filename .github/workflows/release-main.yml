@@ -30,7 +30,7 @@ jobs:
         run: |
           tag_version=$(echo "${GITHUB_REF#refs/tags/}")  # e.g. v1.0.17
           version_tuple=$(echo "$tag_version" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1, \2, \3/')
-          sed "s/\"version\": [^)]*/\"version\": ($version_tuple)/" bms_blender_plugin/__init__.py > bms_blender_plugin/__init__.py.tmp
+          sed "s/\"version\": \".*\"/\"version\": \"$version_tuple\"/" bms_blender_plugin/__init__.py > bms_blender_plugin/__init__.py.tmp
           zip -r "bms_blender_plugin-$tag_version.zip" bms_blender_plugin/
           echo "Zip file built"
       - name: Release
