@@ -28,10 +28,16 @@ jobs:
           fetch-depth: 0
       - name: Build and zip folder
         run: |
-          tag_version=$(echo "${GITHUB_REF#refs/tags/}")  # e.g. v1.0.17
-          version_tuple=$(echo "$tag_version" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1, \2, \3/')
-          sed "s/\"version\": \".*\"/\"version\": \"$version_tuple\"/" bms_blender_plugin/__init__.py > bms_blender_plugin/__init__.py.tmp
-          zip -r "bms_blender_plugin-$tag_version.zip" bms_blender_plugin/
+          tag_version="v1.0.17"
+          version_tuple="1, 0, 17"
+          # Copy the folder to a temp directory
+          cp -r bms_blender_plugin bms_blender_plugin_tmp
+          # Update only the version in the temp copy
+          sed -i 's/"version": ([^)]*)/"version": ('$version_tuple')/' bms_blender_plugin_tmp/__init__.py
+          # Zip the temp directory (will be named as required)
+          zip -r "bms_blender_plugin-${tag_version}.zip" bms_blender_plugin_tmp
+          # Remove the temp directory
+          rm -rf bms_blender_plugin_tmp
           echo "Zip file built"
       - name: Release
         uses: softprops/action-gh-release@v1
