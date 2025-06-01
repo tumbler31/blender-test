@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
       - name: Build and zip folder
         run: |
-          tag_version=$(echo "${GITHUB_REF#refs/tags/}")  # e.g. v1.0.17
+          tag_version=$(echo "${GITHUB_REF#refs/tags/release/}")  # e.g. v1.0.17
           version_tuple=$(echo "$tag_version" | awk -F'[v.]' '{print $2, $3, $4}')
           sed -i "s/\"version\": .*/\"version\": (${version_tuple}),/" bms_blender_plugin/__init__.py
           zip -r "bms_blender_plugin-${tag_version}.zip" bms_blender_plugin
