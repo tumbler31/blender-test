@@ -33,10 +33,11 @@ jobs:
           sed -i "s/\"version\": .*/\"version\": (${version_tuple}),/" bms_blender_plugin/__init__.py
           zip -r "bms_blender_plugin-${tag_version}.zip" bms_blender_plugin
           echo "Zip file built"
+          echo "TAG_VERSION=$tag_version" >> $GITHUB_ENV
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          name: "Release ${{ github.ref }}"
+          tag_name: release/v${{ env.TAG_VERSION }}
+          name: "Release v${{ env.TAG_VERSION }}"
           files: |
             bms_blender_plugin*.zip
