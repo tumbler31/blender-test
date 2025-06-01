@@ -33,7 +33,7 @@ jobs:
           # Copy the folder to a temp directory
           cp -r bms_blender_plugin bms_blender_plugin_tmp
           # Update only the version in the temp copy
-          sed -i 's/"version": ([^)]*)/"version": ('$version_tuple')/' bms_blender_plugin_tmp/__init__.py
+          sed -i "s/\"version\": \([^\)]*\)/\"version\": ($version_tuple)/" bms_blender_plugin_tmp/__init__.py
           # Zip the temp directory (will be named as required)
           zip -r "bms_blender_plugin-${tag_version}.zip" bms_blender_plugin_tmp
           # Remove the temp directory
