@@ -28,10 +28,10 @@ jobs:
           fetch-depth: 0
       - name: Build and zip folder
         run: |
-          blender_version=$(echo ${{ github.ref }} | tr . ,)
-          sed 's/"version":.*/"version": (${blender_version}),/' bms_blender_plugin/__init__.py > bms_blender_plugin/__init__.py.tmp
-          mv bms_blender_plugin/__init__.py.tmp bms_blender_plugin/__init__.py
-          zip -r "bms_blender_plugin-${{ github.ref }}.zip" bms_blender_plugin/
+          tag_version=$(echo "${GITHUB_REF#refs/tags/}")  # e.g. v1.0.17
+          version_tuple=$(echo "$tag_version" | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1, \2, \3/')
+          sed 's/"version": ([^)]*)/"version": ('$version_tuple')/' bms_blender_plugin/__init__.py > bms_blender_plugin/__init__.py.tmp
+          zip -r "bms_blender_plugin-$tag_version.zip" bms_blender_plugin/
           echo "Zip file built"
       - name: Release
         uses: softprops/action-gh-release@v1
